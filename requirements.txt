@@ -1,0 +1,6 @@
+requests>=2.27.1
+pandas==1.5.3
+cvss>=2.4
+pydriller>=2.4.1
+numpy==1.26.4
+matplotlib==3.9.1 

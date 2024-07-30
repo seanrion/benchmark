@@ -1,0 +1,16 @@
+from TestCase import *
+from Const import *
+from Env import *
+
+def run_rudra_cmd(test_case:TestCase):
+    env_dict = dict(os.environ)
+    print(os.path.abspath(os.path.join(test_case.report_path, "rudra_report")))
+    env_dict["RUDRA_REPORT_PATH"] = os.path.abspath(os.path.join(test_case.report_path, "rudra_report"))
+    env_dict["LD_LIBRARY_PATH"] = RUDRA2_RUSTC_LD_LIBRARY_PATH
+    env_dict["RUSTUP_TOOLCHAIN"] = RUDRA2_RUSTC_VERSION
+    env_dict["RUSTFLAGS"] = RUDRA2_RUSTFLAGS
+    run_cmd(test_case,CARGO_RUDRA_CMD,env_dict)
+
+    return test_case
+
+
