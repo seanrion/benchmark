@@ -1,7 +1,7 @@
 MEMORY_LIMIT_BYTES = 128 * 1024 * 1024 * 1024
-THREAD_NUM = 1
+THREAD_NUM = 4
 TIMEOUT_ENABLE = True
-TIMEOUT = 30*60*60
+TIMEOUT = 30*60
 CSV_DATA_PATH = "./fix_commits2.csv"
 CVE_REPO_DIR = "./cve_repos"
 REPO_DIFF_DATA_DIR = "./diff_data"
@@ -12,10 +12,23 @@ CLIPPY_REPORT_DIR = "./clippy_report"
 SEMGREP_REPORT_DIR = "./semgrep_report"
 LOCKBUD_REPORT_DIR = "./lockbud_report"
 MIRCHECKER1_REPORT_DIR = "./mirchecker1_report"
+PRUSTI_REPORT_DIR = "./prusti_report"
+MIRAI_REPORT_DIR = "./mirai_report"
 MIRCHECKER_FUNC_NUM_LIMIT = -1
+
 CARGO_CLEAN_CMD = [
     "cargo",
     "clean",
+]
+
+CARGO_MIRAI_CMD = [
+    "cargo",
+    "mirai",
+]
+
+CARGO_PRUSTI_CMD = [
+    "cargo",
+    "prusti",
 ]
 CARGO_MIRCHECKER_CMD_GET_FUNC_LIST = [
     "cargo",

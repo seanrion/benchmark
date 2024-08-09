@@ -9,7 +9,7 @@ from tqdm import tqdm
 import threading
 def run_test(test_case:TestCase):
     Rudra2.run_rudra_cmd(test_case)
-
+    return test_case
 
 
 if __name__ == "__main__":
@@ -17,24 +17,34 @@ if __name__ == "__main__":
 
     # cve_dirs = list(filter(
     #     lambda t: t is not None,
-    #     map(lambda path: path if ("['GHSA-rxr4-x558-x7hw', 'RUSTSEC-2018-0003']" in path) else None, cve_dirs)))
+    #     map(lambda path: path if ("RUSTSEC-2020-0094, GHSA-39xg-8p43-h76x" in path) else None, cve_dirs)))
 
 
     cve_repos = [os.path.join(d,"buggy") for d in cve_dirs]
-    cve_repos = [[f.path for f in os.scandir(d) if f.is_dir()][0] for d in cve_repos]
-    rudra2_report_dir = [d.replace(CVE_REPO_DIR,RUDRA2_REPORT_DIR) for d in cve_dirs]
+    cve_repos = [[f.path for f in os.scandir(d) if f.is_dir()] for d in cve_repos]
+    cve_repos = list(filter(
+        lambda t: t is not None,
+        map(lambda path: None if not path else path[0], cve_repos)))
+    
+
+    rudra2_report_dir = [os.path.dirname(os.path.dirname(d.replace(CVE_REPO_DIR,RUDRA2_REPORT_DIR))) for d in cve_repos]
+
     for d in rudra2_report_dir:
         if not os.path.exists(d):
             os.makedirs(d)
-    test_cases = filter(
+    test_cases = list(filter(
         lambda t: t is not None,
         map(lambda path,report_path: TestCase.create_test_case(path,report_path), cve_repos,rudra2_report_dir)
-    )
+    ))
 
-    progress_bar = tqdm(total=len(rudra2_report_dir), desc="Processing test cases")
-
-    def update_progress_bar(result):
+    success_cnt = 0
+    failure_cnt = 0
+    progress_bar = tqdm(total=len(test_cases), desc="Processing test cases")
+    def update_progress_bar(test_case:TestCase):
         with threading.Lock():
+            global success_cnt,failure_cnt
+            success_cnt += test_case.success_cnt
+            failure_cnt += test_case.failure_cnt
             progress_bar.update()
 
     with ThreadPool(THREAD_NUM) as pool:
@@ -48,3 +58,8 @@ if __name__ == "__main__":
         for result in results:
             result.get()
 
+    print("success cnt:"+str(success_cnt))
+    print("failure cnt:"+str(failure_cnt))
+    with open("./rudra2.result",'w') as f:
+        f.write("success cnt:"+str(success_cnt)+"\n")
+        f.write("failure cnt:"+str(failure_cnt))

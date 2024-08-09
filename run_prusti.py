@@ -3,12 +3,12 @@ import os
 import os.path
 from Const import *
 from TestCase import *
-import Clippy
+import Prusti
 from multiprocessing.pool import ThreadPool
 from tqdm import tqdm
 import threading
 def run_test(test_case:TestCase):
-    Clippy.run_clippy_cmd(test_case)
+    Prusti.run_prusti_cmd(test_case)
     return test_case
 
 
@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     # cve_dirs = list(filter(
     #     lambda t: t is not None,
-    #     map(lambda path: path if ("RUSTSEC-2020-0094, GHSA-39xg-8p43-h76x" in path) else None, cve_dirs)))
+    #     map(lambda path: path if ("GHSA-w47j-hqpf-qw9w, RUSTSEC-2021-0004" in path) else None, cve_dirs)))
 
 
     cve_repos = [os.path.join(d,"buggy") for d in cve_dirs]
@@ -26,18 +26,18 @@ if __name__ == "__main__":
     cve_repos = list(filter(
         lambda t: t is not None,
         map(lambda path: None if not path else path[0], cve_repos)))
+
+
+
     
+    prusti_report_dir = [os.path.dirname(os.path.dirname(d.replace(CVE_REPO_DIR,PRUSTI_REPORT_DIR))) for d in cve_repos]
 
-
-
-    clippy_report_dir = [os.path.dirname(os.path.dirname(d.replace(CVE_REPO_DIR,CLIPPY_REPORT_DIR))) for d in cve_repos]
-    for d in clippy_report_dir:
+    for d in prusti_report_dir:
         if not os.path.exists(d):
             os.makedirs(d)
     test_cases = list(filter(
         lambda t: t is not None,
-        map(lambda path,report_path: TestCase.create_test_case(path,report_path), cve_repos, clippy_report_dir)
-        # map(lambda path,report_path: TestCase.create_test_case(path,report_path,report_format="json"), cve_repos, clippy_report_dir)
+        map(lambda path,report_path: TestCase.create_test_case(path,report_path), cve_repos,prusti_report_dir)
     ))
 
     success_cnt = 0
@@ -63,6 +63,6 @@ if __name__ == "__main__":
 
     print("success cnt:"+str(success_cnt))
     print("failure cnt:"+str(failure_cnt))
-    with open("./clippy.result",'w') as f:
+    with open("./prusti.result",'w') as f:
         f.write("success cnt:"+str(success_cnt)+"\n")
         f.write("failure cnt:"+str(failure_cnt))

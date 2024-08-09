@@ -2,6 +2,13 @@
 repos_mirror
 cve_repos
 mirchecker1_report
+clippy_report
+lockbud_report
+rudra1_report
+rudra2_report
+rudra3_report
+semgrep_report
+prusti_report
 .DS_Store
 test/
 *.csv

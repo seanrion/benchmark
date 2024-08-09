@@ -24,7 +24,8 @@ LOCKBUD_RUSTC_VERSION = "nightly-2024-05-21"
 MIRCHECKER1_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2020-12-29-x86_64-unknown-linux-gnu/lib"
 MIRCHECKER1_RUSTC_VERSION = "nightly-2020-12-29"
 
+PRUSTI_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2023-09-15-x86_64-unknown-linux-gnu/lib"
+PRUSTI_RUSTC_VERSION = "nightly-2023-09-15"
 
-
-# MIRAI_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2023-10-08-x86_64-unknown-linux-gnu/lib"
-# MIRAI_RUSTC_VERSION = "nightly-2023-10-08"
+MIRAI_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2023-12-30-x86_64-unknown-linux-gnu/lib"
+MIRAI_RUSTC_VERSION = "nightly-2023-12-30"

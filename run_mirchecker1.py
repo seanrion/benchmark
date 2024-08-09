@@ -15,26 +15,37 @@ def run_test(test_case:TestCase):
 
 if __name__ == "__main__":
     cve_dirs = [f.path for f in os.scandir(CVE_REPO_DIR) if f.is_dir()]
+
     # cve_dirs = list(filter(
     #     lambda t: t is not None,
-    #     map(lambda path: path if ("RUSTSEC-2018-0004, GHSA-8c6g-4xc5-w96c" in path) else None, cve_dirs)))
+    #     map(lambda path: path if ("GHSA-w47j-hqpf-qw9w, RUSTSEC-2021-0004" in path) else None, cve_dirs)))
 
 
     cve_repos = [os.path.join(d,"buggy") for d in cve_dirs]
-    cve_repos = [[f.path for f in os.scandir(d) if f.is_dir()][0] for d in cve_repos]
-    mirchecker1_report_dir = [d.replace(CVE_REPO_DIR,MIRCHECKER1_REPORT_DIR) for d in cve_dirs]
+    cve_repos = [[f.path for f in os.scandir(d) if f.is_dir()] for d in cve_repos]
+    cve_repos = list(filter(
+        lambda t: t is not None,
+        map(lambda path: None if not path else path[0], cve_repos)))
+
+    mirchecker1_report_dir = [os.path.dirname(os.path.dirname(d.replace(CVE_REPO_DIR,MIRCHECKER1_REPORT_DIR))) for d in cve_repos]
     for d in mirchecker1_report_dir:
         if not os.path.exists(d):
             os.makedirs(d)
-    test_cases = filter(
+    test_cases = list(filter(
         lambda t: t is not None,
         map(lambda path,report_path: TestCase.create_test_case(path,report_path), cve_repos, mirchecker1_report_dir)
-    )
+    ))
     
-    progress_bar = tqdm(total=len(mirchecker1_report_dir), desc="Processing test cases")
-    def update_progress_bar(result):
+    success_cnt = 0
+    failure_cnt = 0
+    progress_bar = tqdm(total=len(test_cases), desc="Processing test cases")
+    def update_progress_bar(test_case:TestCase):
         with threading.Lock():
+            global success_cnt,failure_cnt
+            success_cnt += test_case.success_cnt
+            failure_cnt += test_case.failure_cnt
             progress_bar.update()
+
 
     with ThreadPool(THREAD_NUM) as pool:
         results = []
@@ -47,3 +58,8 @@ if __name__ == "__main__":
         for result in results:
             result.get()
 
+    print("success cnt:"+str(success_cnt))
+    print("failure cnt:"+str(failure_cnt))
+    with open("./mirchecker1.result",'w') as f:
+        f.write("success cnt:"+str(success_cnt)+"\n")
+        f.write("failure cnt:"+str(failure_cnt))

@@ -23,6 +23,6 @@ def run_mirchecker_cmd(test_case:TestCase):
             for func in content:
                 cmd = CARGO_MIRCHECKER_CMD.copy()
                 cmd.append(func)
-                run_cmd(test_case,cmd,env_dict,output_file=test_case.mirchecker_report+"_"+func)
+                run_cmd(test_case,cmd,env_dict,output_file=test_case.mirchecker_report+"_"+func,error_file=test_case.error_file)
         
 

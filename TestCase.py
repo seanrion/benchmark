@@ -2,12 +2,17 @@ import os
 import subprocess
 from Const import *
 import resource
+import signal
 class TestCase:
 
     def __init__(self, path, report_path, report_format, lockbud_checker="all"):
         # self.rudra_config = rudra_config
+        self.success_cnt = 0
+        self.failure_cnt = 0
         self.path = path
         self.report_path = report_path
+        self.out_file = os.path.join(report_path, "stdout")
+        self.error_file = os.path.join(report_path, "stderr")
         self.rudra_report = os.path.join(report_path, "rudra_report")
         self.semgrep_report = os.path.join(report_path, "semgrep_report.json")
         self.report_format = report_format
@@ -15,6 +20,9 @@ class TestCase:
             self.clippy_report = os.path.join(report_path, "clippy_report.json")
         else:
             self.clippy_report = os.path.join(report_path, "clippy_report")
+
+        self.prusti_report = os.path.join(report_path, "prusti_report")
+        self.mirai_report = os.path.join(report_path, "mirai_report")
         self.lockbud_checker = lockbud_checker
         if lockbud_checker=="all":
             self.lockbud_report = os.path.join(report_path, "lockbud_all_report")
@@ -49,15 +57,20 @@ class TestCase:
         if self.is_success():
             return "\u001b[32;1mSUCCESS       \u001b[0m  {}".format(self.path, self.run_message)
         else:
-            return "\u001b[31;1mFAIL          \u001b[0m  {}\n\n{}".format(self.path, self.run_message)
+            return "\u001b[31;1mFAIL          \u001b[0m  {}".format(self.path, self.run_message)
         
 
 
 def set_memory_limit(limit_bytes):
     resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
 
-def run_cmd(test_case:TestCase,cmd:list,env:dict,output_file=None):
-    print(cmd)
+def kill_command(p):
+    os.killpg(os.getpgid(p.pid),signal.SIGTERM)
+
+def run_cmd(test_case:TestCase,cmd:list,env:dict,output_file=None,error_file=None):
+    # print(cmd)
+    # print(' '.join(cmd))
+
     try:
         process = subprocess.Popen(
             args = ' '.join(CARGO_CLEAN_CMD),
@@ -66,6 +79,7 @@ def run_cmd(test_case:TestCase,cmd:list,env:dict,output_file=None):
             stderr=subprocess.STDOUT,
             env=env,
             shell=True,
+            start_new_session=True,
         )
         process.wait()
         process = subprocess.Popen(
@@ -76,29 +90,57 @@ def run_cmd(test_case:TestCase,cmd:list,env:dict,output_file=None):
             env=env,
             cwd=test_case.path,
             shell=True,
+            start_new_session=True,
         )
         
         stdout,stderr = process.communicate(timeout=TIMEOUT if TIMEOUT_ENABLE else None)
+    
         returncode = process.poll()
+
         if not output_file==None:
             with open(output_file,'w') as f:
                 f.write(stdout.decode('utf-8'))
+        if not error_file==None and not stderr==None:
+            with open(error_file,'w') as f:
+                f.write(stderr.decode('utf-8'))
+
         if returncode==0:
             test_case.success = True
+            test_case.success_cnt += 1
         else:
             test_case.success = False
-        test_case.run_message = stdout.decode('utf-8')
+            test_case.failure_cnt += 1
+
         print(str(test_case))
     except subprocess.TimeoutExpired as e:
-        process.kill()
-        process.wait()
+        kill_command(process)
         test_case.success = False
-        
+        test_case.failure_cnt += 1
         test_case.run_message = "TIMEOUT after "+str(TIMEOUT)+" seconds"
         if not output_file==None:
-            with open(output_file+".timeout",'w') as f:
-                pass
+            with open(output_file,'w') as f:
+                f.write(test_case.run_message)
+                if not e.stdout==None:
+                    f.write(e.stdout.decode('utf-8'))
+        if not error_file==None:
+            with open(error_file,'w') as f:
+                f.write(test_case.run_message)
+                if not e.stderr==None:
+                    f.write(e.stderr.decode('utf-8'))
         print(str(test_case))
-    # except subprocess.CalledProcessError as e:
-    #     test_case.success = True
-    #     test_case.run_message = "CalledProcessError"
+    except subprocess.CalledProcessError as e:
+        kill_command(process)
+        test_case.success = False
+        test_case.failure_cnt += 1
+        test_case.run_message = "CalledProcessError"
+        if not output_file==None:
+            with open(output_file,'w') as f:
+                f.write(test_case.run_message)
+                if not e.stdout==None:
+                    f.write(e.stdout.decode('utf-8'))
+        if not error_file==None:
+            with open(error_file,'w') as f:
+                f.write(test_case.run_message)
+                if not e.stderr==None:
+                    f.write(e.stderr.decode('utf-8'))
+        print(str(test_case))
