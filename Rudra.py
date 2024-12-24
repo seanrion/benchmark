@@ -11,5 +11,15 @@ def run_rudra_cmd(test_case:TestCase):
     run_cmd(test_case,CARGO_RUDRA_CMD,env_dict,output_file=test_case.out_file,error_file=test_case.error_file)
     return test_case
 
+def run_rudra_cmd(test_case:TestCase,env_dict:dict):
+    
+    if test_case.workspace_members_path == []:
+        cmd = CARGO_RUDRA_CMD.copy()
+        run_cmd(test_case,cmd,env_dict,output_file=test_case.out_file,error_file=test_case.error_file)
+                    
+    else:
+        for member in test_case.workspace_members_path:
+            cmd = CARGO_RUDRA_CMD.copy()
+            run_cmd(test_case,cmd,env_dict,output_file=test_case.out_file,error_file=test_case.error_file,cwd=member)                        
 
 

@@ -1,7 +1,7 @@
-MEMORY_LIMIT_BYTES = 128 * 1024 * 1024 * 1024
+MEMORY_LIMIT_BYTES = 64 * 1024 * 1024 * 1024
 THREAD_NUM = 4
 TIMEOUT_ENABLE = True
-TIMEOUT = 30*60
+TIMEOUT = 1800
 CSV_DATA_PATH = "./fix_commits2.csv"
 CVE_REPO_DIR = "./cve_repos"
 REPO_DIFF_DATA_DIR = "./diff_data"
@@ -10,15 +10,32 @@ RUDRA2_REPORT_DIR = "./rudra2_report"
 RUDRA3_REPORT_DIR = "./rudra3_report"
 CLIPPY_REPORT_DIR = "./clippy_report"
 SEMGREP_REPORT_DIR = "./semgrep_report"
-LOCKBUD_REPORT_DIR = "./lockbud_report"
+LOCKBUD2_REPORT_DIR = "./lockbud2_report"
+LOCKBUD1_REPORT_DIR = "./lockbud1_report"
 MIRCHECKER1_REPORT_DIR = "./mirchecker1_report"
+MIRCHECKER2_REPORT_DIR = "./mirchecker2_report"
 PRUSTI_REPORT_DIR = "./prusti_report"
 MIRAI_REPORT_DIR = "./mirai_report"
+MIRAI2_REPORT_DIR = "./mirai2_report"
+MIRAI9_REPORT_DIR = "./mirai9_report"
+MIRAI10_REPORT_DIR = "./mirai10_report"
+MIRAI8_REPORT_DIR = "./mirai8_report"
+MIRAI7_REPORT_DIR = "./mirai7_report"
+
+BUILD_OUT_DIR = "./build_out"
 MIRCHECKER_FUNC_NUM_LIMIT = -1
 
 CARGO_CLEAN_CMD = [
     "cargo",
     "clean",
+]
+CARGO_UPDATE_CMD = [
+    "cargo",
+    "update",
+]
+CARGO_BUILD_CMD = [
+    "cargo",
+    "build",
 ]
 
 CARGO_MIRAI_CMD = [
@@ -51,8 +68,8 @@ CARGO_RUDRA_CMD = [
     "rudra",
     "--",
     "-Zrudra-enable-unsafe-destructor",
-    "--crate-type",
-    "lib"
+    # "--crate-type",
+    # "lib"
 ]
 CARGO_LOCKBUD_CMD_ALL = [
     "cargo",
