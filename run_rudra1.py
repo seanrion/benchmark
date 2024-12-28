@@ -17,6 +17,7 @@ def run_test(test_case:TestCase):
     env_dict["LD_LIBRARY_PATH"] = RUDRA1_RUSTC_LD_LIBRARY_PATH
     env_dict["RUSTUP_TOOLCHAIN"] = RUDRA1_RUSTC_VERSION
     env_dict["RUSTFLAGS"] = RUDRA1_RUSTFLAGS
+    env_dict["PATH"] = RUDRA1_PATH + ":" + env_dict["PATH"]
     Rudra.run_rudra_cmd(test_case,env_dict)
     return test_case
 

@@ -2,6 +2,13 @@ WASM_TARGET_ENABLE = False
 WASM_TARGET = "wasm32-unknown-unknown"
 
 CARGO_PATH = "~/.cargo/bin/cargo"
+RUDRA1_PATH = "/home/lsy/workspace/tool_bin/rudra1/bin"
+RUDRA2_PATH = "/home/lsy/workspace/tool_bin/rudra2/bin"
+RUDRA3_PATH = "/home/lsy/workspace/tool_bin/rudra3/bin"
+MIRCHECKER1_PATH = "/home/lsy/workspace/tool_bin/mirchecker1/bin"
+MIRCHECKER2_PATH = "/home/lsy/workspace/tool_bin/mirchecker2/bin"
+LOCKBUD1_PATH = "/home/lsy/workspace/tool_bin/lockbud1/bin"
+LOCKBUD2_PATH = "/home/lsy/workspace/tool_bin/lockbud2/bin"
 
 RUDRA1_RUSTFLAGS = "-L ~/.rustup/toolchains/nightly-2020-08-26-x86_64-unknown-linux-gnu/lib"
 RUDRA1_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2020-08-26-x86_64-unknown-linux-gnu/lib"
@@ -28,8 +35,8 @@ LOCKBUD2_RUSTC_VERSION = "nightly-2024-05-21"
 MIRCHECKER1_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2020-12-29-x86_64-unknown-linux-gnu/lib"
 MIRCHECKER1_RUSTC_VERSION = "nightly-2020-12-29"
 
-MIRCHECKER2_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2021-03-25-x86_64-unknown-linux-gnu/lib"
-MIRCHECKER2_RUSTC_VERSION = "nightly-2021-03-25"
+MIRCHECKER2_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2021-03-12-x86_64-unknown-linux-gnu/lib"
+MIRCHECKER2_RUSTC_VERSION = "nightly-2021-03-12"
 
 PRUSTI_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2023-09-15-x86_64-unknown-linux-gnu/lib"
 PRUSTI_RUSTC_VERSION = "nightly-2023-09-15"

@@ -15,6 +15,7 @@ rudra3_report
 semgrep_report
 prusti_report 
 mirai_report
+semgrep*
 
 
 build_out

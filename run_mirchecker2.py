@@ -17,6 +17,7 @@ def run_test(test_case:TestCase):
     env_dict = dict(os.environ)
     env_dict["LD_LIBRARY_PATH"] = MIRCHECKER2_RUSTC_LD_LIBRARY_PATH
     env_dict["RUSTUP_TOOLCHAIN"] = MIRCHECKER2_RUSTC_VERSION
+    env_dict["PATH"] = MIRCHECKER2_PATH + ":" + env_dict["PATH"]
     # env_dict["RUST_BACKTRACE"] = "full"
     # env_dict["RUST_LOG"] = "rust_mir_checker"
     Mirchecker.run_mirchecker_cmd(test_case,env_dict)

@@ -94,7 +94,6 @@ def run_cmd(test_case:TestCase,cmd:list,env:dict,cwd=None,output_file=None,error
             shell=True,
             start_new_session=True,
         )
-        # print(cmd)
         # print(env)
         stdout,stderr = process.communicate(timeout=TIMEOUT if TIMEOUT_ENABLE else None)
 
