@@ -1,5 +1,5 @@
 MEMORY_LIMIT_BYTES = 64 * 1024 * 1024 * 1024
-THREAD_NUM = 16
+THREAD_NUM = 3
 TIMEOUT_ENABLE = True
 TIMEOUT = 1800
 CSV_DATA_PATH = "./fix_commits2.csv"
@@ -14,6 +14,8 @@ LOCKBUD2_REPORT_DIR = "./lockbud2_report"
 LOCKBUD1_REPORT_DIR = "./lockbud1_report"
 MIRCHECKER1_REPORT_DIR = "./mirchecker1_report"
 MIRCHECKER2_REPORT_DIR = "./mirchecker2_report"
+MIRCHECKER3_REPORT_DIR = "./mirchecker3_report"
+
 PRUSTI_REPORT_DIR = "./prusti_report"
 MIRAI_REPORT_DIR = "./mirai_report"
 MIRAI2_REPORT_DIR = "./mirai2_report"
@@ -60,7 +62,11 @@ CARGO_MIRCHECKER_CMD = [
     # "--message-format=json",
     "--",
     "--entry",
-    ]
+]
+CARGO_MIRCHECKER_CMD_DEFAULT = [
+    "cargo",
+    "mir-checker",
+]
 
 
 CARGO_RUDRA_CMD = [

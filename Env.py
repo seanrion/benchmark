@@ -7,6 +7,8 @@ RUDRA2_PATH = "/home/lsy/workspace/tool_bin/rudra2/bin"
 RUDRA3_PATH = "/home/lsy/workspace/tool_bin/rudra3/bin"
 MIRCHECKER1_PATH = "/home/lsy/workspace/tool_bin/mirchecker1/bin"
 MIRCHECKER2_PATH = "/home/lsy/workspace/tool_bin/mirchecker2/bin"
+MIRCHECKER3_PATH = "/home/lsy/workspace/tool_bin/mirchecker3/bin"
+
 LOCKBUD1_PATH = "/home/lsy/workspace/tool_bin/lockbud1/bin"
 LOCKBUD2_PATH = "/home/lsy/workspace/tool_bin/lockbud2/bin"
 
@@ -37,6 +39,9 @@ MIRCHECKER1_RUSTC_VERSION = "nightly-2020-12-29"
 
 MIRCHECKER2_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2021-03-12-x86_64-unknown-linux-gnu/lib"
 MIRCHECKER2_RUSTC_VERSION = "nightly-2021-03-12"
+
+MIRCHECKER3_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2022-04-01-x86_64-unknown-linux-gnu/lib"
+MIRCHECKER3_RUSTC_VERSION = "nightly-2022-04-01"
 
 PRUSTI_RUSTC_LD_LIBRARY_PATH = "~/.rustup/toolchains/nightly-2023-09-15-x86_64-unknown-linux-gnu/lib"
 PRUSTI_RUSTC_VERSION = "nightly-2023-09-15"
