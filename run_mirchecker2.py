@@ -20,7 +20,7 @@ def run_test(test_case:TestCase):
     env_dict["PATH"] = MIRCHECKER2_PATH + ":" + env_dict["PATH"]
     # env_dict["RUST_BACKTRACE"] = "full"
     # env_dict["RUST_LOG"] = "rust_mir_checker"
-    Mirchecker.run_mirchecker_cmd_default(test_case,env_dict)
+    Mirchecker.run_mirchecker_cmd(test_case,env_dict)
     return test_case
 
 
@@ -33,8 +33,8 @@ if __name__ == "__main__":
 
     test_cases = []
     for index, row in df.iterrows():
-        if not row['cve_id']=="RUSTSEC-2020-0009, GHSA-c9h5-hf8r-m97x":
-            continue
+        # if not row['cve_id']=="RUSTSEC-2020-0009, GHSA-c9h5-hf8r-m97x":
+        #     continue
         cve_id = row['cve_id']
         cmd_excute_paths = row['cmd_excute_path']
         cve_repo_path = row['cve_repo_path']

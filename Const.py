@@ -1,7 +1,7 @@
 MEMORY_LIMIT_BYTES = 64 * 1024 * 1024 * 1024
-THREAD_NUM = 3
+THREAD_NUM = 1
 TIMEOUT_ENABLE = True
-TIMEOUT = 1800
+TIMEOUT = 300
 CSV_DATA_PATH = "./fix_commits2.csv"
 CVE_REPO_DIR = "./cve_repos"
 REPO_DIFF_DATA_DIR = "./diff_data"

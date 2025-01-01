@@ -60,6 +60,8 @@ def main():
     fail_cnt_fix = 0
 
     df_fixes = pd.read_csv('../data_extraction/fix_commits2.csv')
+    # df_fixes = pd.read_csv('../data_extraction/fail_commits.csv')
+
     df_fixes.drop_duplicates(subset =['hash', 'repo_url'], keep = 'first', inplace = True)
     df_fixes['cve_id'] = df_fixes['cve_id'].str.replace(r"[\[\]']", '', regex=True)
     df_fixes = df_fixes.groupby('cve_id').agg({
@@ -84,6 +86,7 @@ def main():
         # outpath_fix = compiler_result+package+"/"+cve_id+"_fix"
         full_project_name = get_full_project_name(repo_url)
         repo_dest_path = os.path.join(dest, full_project_name)
+        print(repo_dest_path)
         cve_repo_path = os.path.join(cve_repos,cve_id)
         if os.path.exists(repo_dest_path):
             if is_git_repo(repo_dest_path):

@@ -2,7 +2,7 @@ import os
 import csv
 from Const import *
 
-root_dir = MIRCHECKER2_REPORT_DIR
+root_dir = MIRCHECKER3_REPORT_DIR
 verify_errors = [
 'which would overflow',
 ]
@@ -81,8 +81,31 @@ with open(output_file, "w", newline='') as csvfile:
 print(f"Results have been written to {output_file}")
 
 specific_cve = [
+"RUSTSEC-2020-0028, GHSA-8q2v-67v7-6vc6",
+"RUSTSEC-2020-0048, GHSA-v3j6-xf77-8r9c",
+"GHSA-6x52-88cq-55q5",
 "GHSA-pf3p-x6qj-6j7q, RUSTSEC-2020-0081",
+"RUSTSEC-2020-0059, GHSA-rh4w-94hh-9943",
+"GHSA-67hm-27mx-9cg7",
+"GHSA-p24j-h477-76q3, RUSTSEC-2021-0106",
 "RUSTSEC-2021-0071",
+"RUSTSEC-2020-0009, GHSA-c9h5-hf8r-m97x",
+"RUSTSEC-2021-0124, GHSA-fg7r-2g4j-5cgr",
+"GHSA-6mv3-wm7j-h4w5",
+"GHSA-44mr-8vmm-wjhg, RUSTSEC-2022-0076",
+"GHSA-2hvr-h6gw-qrxp",
+"GHSA-8v4j-7jgf-5rg9, RUSTSEC-2022-0082",
+"GHSA-8mj7-wxmc-f424, RUSTSEC-2022-0028",
+"GHSA-6r8p-hpg7-825g",
+"GHSA-4mq4-7rw3-vm5j",
+"GHSA-r64r-5h43-26qv",
+"GHSA-w3vp-jw9m-f9pm",
+"RUSTSEC-2023-0064, GHSA-rrjw-j4m2-mf34",
+"GHSA-vx24-x4mv-vwr5",
+"RUSTSEC-2024-0336, GHSA-6g7w-8wpp-frhj",
+"GHSA-3qx3-6hxr-j2ch",
+"GHSA-52xf-5p2m-9wrv",
+"GHSA-67fv-9r7g-432h",
 ]
 for cve in specific_cve:
     target_report = next((report["total"] for report in results if report["cve_id"] == cve),None)

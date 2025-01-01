@@ -1,18 +1,11 @@
 ../cve_repos/GHSA-475v-pq2g-fp9g/buggy/a6a8a4cad75539cd775dfcfa1755d8b07c0c8323
 ../cve_repos/GHSA-475v-pq2g-fp9g/fixed/73e66b066de4940d129dbf33d91c39170eb4c38d
-../cve_repos/GHSA-cm8g-544f-p9x9, GHSA-q89g-4vhh-mvvm, GHSA-92cx-4xm7-jr9m, GHSA-g87r-23vw-7f87, RUSTSEC-2021-0128, GHSA-g4g4-3pqw-8m7f, GHSA-f6f2-3w33-54r9, GHSA-87xh-9q6h-r5cc, GHSA-4qr3-m7ww-hh9g/buggy/30f8c8c502675011603c4d066396bf317fd49e71
 ../cve_repos/GHSA-hxq4-mx37-fqvg/buggy/3ebebc6b16bec0e55339c8f6a01bcbc00ad21949
 ../cve_repos/GHSA-hxq4-mx37-fqvg/fixed/4b1d417e9de7eafaf5350553c5fcb9264dfa32f5
-../cve_repos/GHSA-jpwg-6gf5-5vh9, RUSTSEC-2021-0050, GHSA-3h87-v52r-p9rg/buggy/59ad9be6989de8eee948510b850851105ecad22e
 ../cve_repos/GHSA-rfhg-rjfp-9q8q/buggy/6ea585142f51f5410ed0463f9a6b625ce6c3901d
 ../cve_repos/GHSA-rfhg-rjfp-9q8q/fixed/73a814240c5db6fae261a6e4ab567b0b094a35db
-../cve_repos/GHSA-v7q4-97x4-4qw2, RUSTSEC-2021-0029/buggy/cb65bc79e53c76bd40d6e0fcae03a8d5be80fbde
 ../cve_repos/GHSA-xcr2-h8hv-6227/buggy/28dee3821f473a4cc15875ef8e4652e52e4cf9ed
 ../cve_repos/GHSA-xcr2-h8hv-6227/fixed/15479a45ffa3b955485ae516696f7e933a8cce8a
 ../cve_repos/RUSTSEC-2023-0025/buggy/b65c33d256cfed65d11adeff41132e3e58754089
 ../cve_repos/RUSTSEC-2023-0025/fixed/eb48b162c3f9c449de0fabfc2e8a33001a2d14d0
 ../cve_repos/RUSTSEC-2023-0025/fixed/35a1df715e1e8e28fb98237908c964ddbb8981fa
-../cve_repos/RUSTSEC-2023-0064, GHSA-rrjw-j4m2-mf34/buggy/d80b5f69772a6e36b0131d3a538e896a8a6a29b1
-../cve_repos/RUSTSEC-2023-0064, GHSA-rrjw-j4m2-mf34/fixed/b06a0dd781accad317fdec5f86f069df4c21875c
-../cve_repos/RUSTSEC-2024-0018, GHSA-xfhw-6mc4-mgxf/buggy/26f7764e79bf16706f69edb2cf04c208d3990270
-../cve_repos/RUSTSEC-2024-0018, GHSA-xfhw-6mc4-mgxf/fixed/c2fde19caf6149d91faa504263f0bc5cafc35de5

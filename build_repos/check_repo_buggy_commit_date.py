@@ -4,7 +4,16 @@ import datetime
 from tqdm import tqdm
 df = pd.read_csv('repos_info_with_published_date.csv')
 
-token = "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"
+def read_token_from_file(file_path):
+    with open(file_path, 'r') as file:
+        token = file.read().strip() 
+    return token
+
+
+token_file_path = 'github_token'  
+token = read_token_from_file(token_file_path)
+
+print("Token has been read from file.")
 
 def get_commit_time(repo_url, commit_sha):
     """

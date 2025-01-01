@@ -2,91 +2,116 @@ import os
 import csv
 import json
 from Const import *
-
-root_dir = SEMGREP_REPORT_DIR
-Semgrep_warning = [
-'rust.actix.command-injection.rust-actix-command-injection.rust-actix-command-injection',
-'rust.actix.path-traversal.tainted-path.tainted-path',
-'rust.actix.ssrf.reqwest-taint.reqwest-taint',
-'rust.hyper.path-traversal.tainted-path.tainted-path',
-'rust.lang.security.args-os.args-os',
-'rust.lang.security.args.args',
-'rust.lang.security.current-exe.current-exe',
-'rust.lang.security.insecure-hashes.insecure-hashes',
-'rust.lang.security.rustls-dangerous.rustls-dangerous',
-'rust.lang.security.temp-dir.temp-dir',
-'rust.lang.security.unsafe-usage.unsafe-usage'
-]
-# 创建一个列表用于存储结果
-results = []
-warning_types = set()
-# 遍历所有二级文件夹
-
-for subdir in os.listdir(root_dir):
-    subdir_path = os.path.join(root_dir, subdir)
-    if os.path.isdir(subdir_path):
-        stdout_file = os.path.join(subdir_path, "semgrep_report.json")
-        row = dict.fromkeys(Semgrep_warning, 0)
-        row["cve_id"] = subdir
-        row["total"] = 0
-        if os.path.exists(stdout_file):
-
-            with open(stdout_file, "r") as file:
-                data = json.load(file)
-                for result in data["results"]:
-                    warning_types.add(result['check_id'])
-                    row[result['check_id']] += 1
-                    row["total"] += 1
-        results.append(row)
-                
+import pandas as pd
+import openpyxl
 
 
-# 如果需要查看具体的信息类型，可以打印集合
-# print("不同的信息类型包括：")
-# for error_type in warning_types:
-#     print(error_type+'\n')
-output_file = "Semgrep_results.csv"
-# with open(output_file, "w", newline='') as csvfile:
-#     writer = csv.DictWriter(csvfile, fieldnames=["cve_id","error: [Prusti: internal error]"])
-#     writer.writeheader()
-#     writer.writerows(results)
+unique_bug_types = set()
+class SemgrepParser():
+    def parse(self, report_path):
+        categorized_results = {}
+        if os.path.exists(report_path):
+            with open(report_path, "r") as file:
+                try:
+                    data = json.load(file)
+                    for result in data["results"]:
+                        bug_type = result['check_id']
+                        unique_bug_types.add(bug_type)
+                        if bug_type not in categorized_results:
+                            categorized_results[bug_type] = []
 
-with open(output_file, "w", newline='') as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames=["cve_id"]+Semgrep_warning+["total"])
-    writer.writeheader()
-    writer.writerows(results)
+                        parsed_result = {
+                            "bug_type": result['check_id'],
+                            "locations": [{
+                                "file_path": result['path'],
+                                "start_line_num": result['start']['line'],
+                                "start_col_num": result['start']['col'],
+                                "end_line_num": result['end']['line'],
+                                "end_col_num": result['end']['col']
+                            }]
+                        }
+                        categorized_results[bug_type].append(parsed_result)
+                except Exception as e:
+                    print(report_path)
+                    print(e)
+                    return {}
+        return categorized_results
 
-print(f"Results have been written to {output_file}")
+if __name__ == "__main__":
+    root_dirs = [
+        "./semgrep0.101.1", 
+        "./semgrep0.115.0", 
+        "./semgrep1.2.1", 
+        "./semgrep1.16.0",
+        "./semgrep1.30.0",
+        "./semgrep1.42.0",
+        "./semgrep1.54.3",
+        "./semgrep1.67.0",
+        "./semgrep1.78.0",
+        "./semgrep1.90.0",
+        "./semgrep1.101.0",
+        ]
+    datas = {}
+    parser = SemgrepParser()
+    for root_dir in root_dirs:
+        results = []
+        for subdir in os.listdir(root_dir):
+            subdir_path = os.path.join(root_dir, subdir)
+            if os.path.isdir(subdir_path):
+                stdout_file = os.path.join(subdir_path, "semgrep_report.json")
+                row = dict()
+                row["cve_id"] = subdir
+                row["details"] = parser.parse(stdout_file)
+                results.append(row)
 
-specific_cve = [
-"GHSA-cqpr-pcm7-m3jc, RUSTSEC-2020-0159",
-"RUSTSEC-2020-0073, GHSA-9wgh-vjj7-7433",
-"RUSTSEC-2020-0123, GHSA-gvcp-948f-8f2p",
-"RUSTSEC-2020-0001, GHSA-4cww-f7w5-x525",
-"GHSA-q9h2-4xhf-23xx, RUSTSEC-2020-0096",
-"RUSTSEC-2021-0105, GHSA-5xg3-j2j6-rcx4",
-"GHSA-f3pg-qwvg-p99c, RUSTSEC-2021-0078",
-"RUSTSEC-2021-0037, GHSA-j8q9-5rp9-4mv9",
-"RUSTSEC-2021-0043, GHSA-w9vv-q986-vj7x",
-"GHSA-gx5w-rrhp-f436",
-"GHSA-x4mq-m75f-mx8m, RUSTSEC-2022-0008",
-"GHSA-2gg5-7c4v-6xx2, RUSTSEC-2022-0055, GHSA-m77f-652q-wwp4",
-"RUSTSEC-2022-0038, GHSA-4rx6-g5vg-5f3j",
-"RUSTSEC-2022-0037, GHSA-xq3c-8gqm-v648",
-"RUSTSEC-2022-0013, GHSA-m5pq-gvj9-9vr8",
-"RUSTSEC-2023-0064, GHSA-rrjw-j4m2-mf34",
-"RUSTSEC-2023-0078, GHSA-8f24-6m29-wm2r",
-"RUSTSEC-2023-0063, GHSA-q8wc-j5m9-27w3",
-"RUSTSEC-2023-0076",
-"RUSTSEC-2023-0065, GHSA-9mcr-873m-xcxp",
-"GHSA-c2hf-vcmr-qjrf, RUSTSEC-2024-0358",
-"GHSA-w277-wpqf-rcfv, RUSTSEC-2024-0010, GHSA-747x-5m58-mq97",
-"GHSA-q445-7m23-qrmw, RUSTSEC-2024-0357",
-"RUSTSEC-2024-0003, GHSA-8r5v-vm4m-4g25",
-"RUSTSEC-2024-0356, GHSA-4qg4-cvh2-crgg",
-]
-for cve in specific_cve:
-    target_report = next((report for report in results if report["cve_id"] == cve),None)
-    print(target_report["total"] - target_report['rust.lang.security.unsafe-usage.unsafe-usage'])
-    # if target_report:
-    #     print(target_report)
+        result_csv = []
+        for result in results:
+            if result["details"] == {}:
+                result_csv.append({"cve_id":result["cve_id"], "bug_type":"total", "num":0})
+            else:
+                total_num = 0
+                for bug_type, itemlist in result["details"].items():
+                    result_csv.append({"cve_id":result["cve_id"], "bug_type":bug_type, "num":len(itemlist)})
+                    total_num += len(itemlist)
+                result_csv.append({"cve_id":result["cve_id"], "bug_type":"total", "num":total_num})
+
+        
+        df = pd.DataFrame(result_csv)
+        pivot_df = df.pivot_table(index='cve_id', columns='bug_type', values='num', fill_value=0)
+        pivot_df = pivot_df.reset_index()
+        output_csv = root_dir+"_results.csv"
+        pivot_df.to_csv(output_csv, index=False)
+        print(f"Results have been written to {output_csv}")
+
+        output_json = root_dir+"_results.json"
+        with open(output_json, "w", newline='') as jsonfile:
+            json.dump(results, jsonfile)
+        print(f"Results have been written to {output_json}")
+        print(unique_bug_types)
+
+        datas[root_dir] = result_csv
+    
+    bug_type_data = {}
+    for root_dir, results in datas.items():
+        for item in results:
+            bug_type = item['bug_type']
+            if bug_type not in bug_type_data:
+                bug_type_data[bug_type] = {}
+            if item['cve_id'] not in bug_type_data[bug_type]:
+                bug_type_data[bug_type][item['cve_id']] = {}
+            bug_type_data[bug_type][item['cve_id']][root_dir] = item['num']
+
+    excel_file = "./semgrep_regression_csv/all_bug_types.xlsx"
+    with pd.ExcelWriter(excel_file, engine='openpyxl') as writer:
+        for bug_type, cve_data in bug_type_data.items():
+            df = pd.DataFrame.from_dict(cve_data, orient='index')
+            for root_dir in root_dirs:
+                if root_dir not in df.columns:
+                    df[root_dir] = 0
+                    
+            df = df[root_dirs]
+            df = df.fillna(0)
+            sheet_name = bug_type[:31] 
+            df.to_excel(writer, sheet_name=sheet_name)
+
+        print(f"All results have been written to {excel_file}")

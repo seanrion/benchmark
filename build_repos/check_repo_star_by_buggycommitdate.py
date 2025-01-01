@@ -6,8 +6,18 @@ import os
 from tqdm import tqdm
 from urllib.parse import urlparse
 import csv
-# 填入你的GitHub个人访问令牌
-ACCESS_TOKEN = "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"
+
+def read_token_from_file(file_path):
+    with open(file_path, 'r') as file:
+        token = file.read().strip() 
+    return token
+
+
+token_file_path = 'github_token'  
+ACCESS_TOKEN = read_token_from_file(token_file_path)
+
+print("Token has been read from file.")
+
 GRAPHQL_ENDPOINT = "https://api.github.com/graphql"
 CUTOFF_DATE_STR = "2024-08-01"
 CUTOFF_DATE = datetime.datetime.strptime(CUTOFF_DATE_STR, '%Y-%m-%d').date()
@@ -59,6 +69,8 @@ def get_star_count_history_cumulative(owner, repo, cutoff_date,progress_bar):
         response = requests.post(GRAPHQL_ENDPOINT, json={"query": query, "variables": variables}, headers=headers)
         if response.status_code == 200:
             data = response.json()
+            if data["data"]["repository"] is None:
+                break
             stargazers = data["data"]["repository"]["stargazers"]["edges"]
             if stargazers:
                 # 获取每页第一个stargazers的starredAt日期，并计算和cutoff_date的差值
@@ -167,7 +179,7 @@ def process_csv(input_csv_path, output_csv_path):
     repo_urls_processed = {}  # 用于记录已经处理过的仓库URL及对应的最晚buggy_commit_time
     for index, row in df.iterrows():
         repo_url = row["repo_url"]
-        buggy_commit_time_str = row["buggy_commit_time"]
+        buggy_commit_time_str = str(row["buggy_commit_time"])
         # 提取日期部分，只关心日期
         buggy_commit_time = datetime.datetime.strptime(buggy_commit_time_str[:10], '%Y-%m-%d').date()
 

@@ -12,19 +12,17 @@ import threading
 success_cnt = 0
 failure_cnt = 0
 semgrep_report_dir_cmd = {
-    "./semgrep0.77.0":"conda run -n semgrep0.77.0 semgrep scan --config p/rust --json --output".split(),
-    "./semgrep0.86.5":"conda run -n semgrep0.86.5 semgrep scan --config p/rust --json --output".split(),
-    "./semgrep0.101.1":"conda run -n semgrep0.101.1 semgrep scan --config p/rust --json --output".split(),
-    "./semgrep0.115.0":"conda run -n semgrep0.115.0 semgrep scan --config p/rust --json --output".split(),
-    "./semgrep1.2.1":"conda run -n semgrep1.2.1 semgrep scan --config p/rust --json --output".split(),
-    "./semgrep1.16.0":"conda run -n semgrep1.16.0 semgrep scan --config p/rust --pro --json --output".split(),
-    "./semgrep1.30.0":"conda run -n semgrep1.30.0 semgrep scan --config p/rust --pro --json --output".split(),
+    # "./semgrep0.101.1":"conda run -n semgrep0.101.1 semgrep scan --config p/rust --json --output".split(),
+    # "./semgrep0.115.0":"conda run -n semgrep0.115.0 semgrep scan --config p/rust --json --output".split(),
+    # "./semgrep1.2.1":"conda run -n semgrep1.2.1 semgrep scan --config p/rust --json --output".split(),
+    # "./semgrep1.16.0":"conda run -n semgrep1.16.0 semgrep scan --config p/rust --pro --json --output".split(),
+    # "./semgrep1.30.0":"conda run -n semgrep1.30.0 semgrep scan --config p/rust --pro --json --output".split(),
     "./semgrep1.42.0":"conda run -n semgrep1.42.0 semgrep scan --config p/rust --pro --json --output".split(),
-    "./semgrep1.54.3":"conda run -n semgrep1.54.3 semgrep scan --config p/rust --pro --json --output".split(),
-    "./semgrep1.67.0":"conda run -n semgrep1.67.0 semgrep scan --config p/rust --pro --json --output".split(),
-    "./semgrep1.78.0":"conda run -n semgrep1.78.0 semgrep scan --config p/rust --pro --json --json-output".split(),
-    "./semgrep1.90.0":"conda run -n semgrep1.90.0 semgrep scan --config p/rust --pro --json --json-output".split(),
-    "./semgrep1.101.0":"conda run -n semgrep1.101.0 semgrep scan --config p/rust --pro --json --json-output".split(),
+    # "./semgrep1.54.3":"conda run -n semgrep1.54.3 semgrep scan --config p/rust --pro --json --output".split(),
+    # "./semgrep1.67.0":"conda run -n semgrep1.67.0 semgrep scan --config p/rust --pro --json --output".split(),
+    # "./semgrep1.78.0":"conda run -n semgrep1.78.0 semgrep scan --config p/rust --pro --json --json-output".split(),
+    # "./semgrep1.90.0":"conda run -n semgrep1.90.0 semgrep scan --config p/rust --pro --json --json-output".split(),
+    # "./semgrep1.101.0":"conda run -n semgrep1.101.0 semgrep scan --config p/rust --pro --json --json-output".split(),
 }
 def run_test(test_case:TestCase,cmd):
     env_dict = dict(os.environ)    
@@ -71,6 +69,8 @@ def test(report_dir,cmd):
         buggy_dir = os.path.join(repo, "buggy")
         value = cve_repos.pop(repo)
         if os.path.isdir(buggy_dir):
+            # if not "GHSA-xr9w-x6gw-c9mj, GHSA-jc97-h3h9-7xh6" in repo:
+            #     continue
             first_buggy_subdir = next((os.path.join(buggy_dir, d) for d in os.listdir(buggy_dir) if os.path.isdir(os.path.join(buggy_dir, d))), None)
             if first_buggy_subdir:
                 new_key = first_buggy_subdir
